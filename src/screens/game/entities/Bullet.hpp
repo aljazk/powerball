@@ -4,11 +4,13 @@
 #include "../../../draw/VertQuad.hpp"
 #include "../../../collision/shapes/ObjectSetter.hpp"
 
+
 class Bullet{
 		sf::Vector2f position;
 		sf::Vector2f velocity;
 		float life_time, max_life_time;
 	public:
+		bool check_delete;
 		Bullet();
 		Bullet(const sf::Vector2f, const sf::Vector2f);
 		Bullet(const float, const float, const float, const float);

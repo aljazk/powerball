@@ -23,22 +23,11 @@ void Robot::set(){
 	energy = 100;
 	max_energy = 100;
 	dmg = 10;
-}
-	
-void Robot::collide(ObjectMap &){
-	
-}
-
-void Robot::move(const float){
-	
+	addType("robot");
 }
 
 void Robot::getVert(sf::VertexArray &vert){
 	VertQuad quad;
 	quad.set(sf::Vector2f(45,0), sf::Vector2f(50,50), position);
 	quad.add(vert);
-}
-
-void Robot::setBallPosition(const sf::Vector2f){
-	
 }

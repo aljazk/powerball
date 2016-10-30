@@ -28,13 +28,13 @@ void SinglePlayer::setLevel(const Level &l){
 	level = l;
 	ObjectSetter os = level.getWallObject();
 	map.add(CollisionObject(os));
-	ai.emplace<Robot>();
 	for(unsigned int i=0; i<10; i++){
 		for(unsigned int j=0; j<10; j++){
 		}
 	}
-	ai.emplace<Turret>(500,500);
-	ai.add();
+	ai.add(std::unique_ptr<Robot>(new Robot()));
+	ai.add(std::unique_ptr<Turret>(new Turret(500,500)));
+	ai.add(std::unique_ptr<eBullet>(new eBullet(100,0, 0.1,0.1)));
 }
 
 void SinglePlayer::run(sf::RenderWindow &window){
@@ -65,6 +65,7 @@ void SinglePlayer::run(sf::RenderWindow &window){
 		ball.move(eclipsed);
 		ai.collide(map);
 		ai.move(eclipsed);
+		ai.check_delete();
 		
 		ball.getPosition(px, py);
 		ball.getVelocity(vx, vy);

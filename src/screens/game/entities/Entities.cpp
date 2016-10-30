@@ -4,6 +4,11 @@ Entities::Entities(){
 	loadTexture("images/robots.png");
 }
 
+Entities::~Entities(){
+	entities.clear();
+	robots.clear();
+}
+
 void Entities::add(){
 	for (const auto& e: entities){
 		add(e->getEntity());
@@ -15,6 +20,24 @@ void Entities::loadTexture(const std::string &t_string){
 		std::cout << "Cannot load texture from: " << t_string << "\n";
 	}
 	Entities_texture.setSmooth(true);
+}
+		
+void Entities::add(std::shared_ptr<Entity> entity) {
+	entities.emplace(entity);
+	if(entity->checkType("robot")){
+		robots.emplace(entity);
+	}
+	if(entity->checkType("bullet")){
+		bullets.emplace(entity);
+	}
+}
+
+void Entities::check_delete(){
+	for (const auto& e: entities){
+		if (e->checkDelete()){
+			entities.erase(e);
+		}
+	}
 }
 
 void Entities::collide(ObjectMap &map){
@@ -28,16 +51,15 @@ void Entities::setBallPosition(const sf::Vector2f new_ball_position){
 }
 
 void Entities::setBallPosition(const float ballx, const float bally){
-	for (const auto& e: entities){
-		e->setBallPosition(sf::Vector2f(ballx, bally));
+	for (const auto& e: robots){
+		std::shared_ptr<Robot> r = std::dynamic_pointer_cast<Robot>(e);
+		r->setBallPosition(sf::Vector2f(ballx, bally));
 	}
 }
 
 void Entities::move(const float eclipsed){
 	for (const auto& e: entities){
-		if(e->id == "turret"){
-			e->move(eclipsed);
-		}
+		e->move(eclipsed);
 	}
 }
 

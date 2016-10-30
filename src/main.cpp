@@ -20,5 +20,4 @@ int main(){
 	mainMenu.run(window);
     
     return 0;
-	
 }

@@ -13,31 +13,19 @@
 #include "robots/Turret.hpp"
 
 class Entities{
-		std::unordered_set<std::unique_ptr<Entity>> entities;
+		std::unordered_set<std::shared_ptr<Entity>> entities;
+		std::unordered_set<std::shared_ptr<Entity>> robots;
+		std::unordered_set<std::shared_ptr<Entity>> bullets;
 		sf::Texture Entities_texture;
 		sf::Vector2f ball_position;
 	public:
 		Entities();
+		~Entities();
 		void loadTexture(const std::string &);
-		void add(std::unique_ptr<Entity> entity) { // use like Entities.add(std::unique_ptr<Robot>(new Robot(5)));
-			entities.emplace(std::move(entity));
-		}
-		template <class T, class... Args>
-		T& emplace(Args&&... args) { // use like Robot& A = Entities.emplace<Robot>(8);
-			T* obj = new T(args...);
-			entities.emplace(std::move(std::unique_ptr<T>(obj)));
-			return *obj;
-		}
-		template <class T, class... Args>
-		const T& emplace(Args&&... args) const {
-			T* obj = new T(args...);
-			entities.emplace(std::move(std::unique_ptr<T>(obj)));
-			return *obj;
-		}
-		void clear(){
-			entities.clear();
-		}
+		void add(std::shared_ptr<Entity>); // use like Entities.add(std::unique_ptr<Robot>(new Robot(5)));
+		void clear(){ entities.clear(); }
 		void add();
+		void check_delete();
 		void collide(ObjectMap &);
 		void setBallPosition(const sf::Vector2f);
 		void setBallPosition(const float, const float);

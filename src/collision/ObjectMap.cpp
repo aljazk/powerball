@@ -43,6 +43,13 @@ void ObjectMap::collideBullets(std::vector<Bullet> &bullets){
 			collideBullet(bullets[i]);
 		}
 	}
+	if (bullets.size() > 0){
+		for (unsigned int i = bullets.size(); i-- > 0; ){
+			if (bullets[i].check_delete){
+				bullets.erase(bullets.begin()+i);
+			}
+		}
+	}
 }
 
 void ObjectMap::collideBullet(Bullet &bullet){
@@ -53,7 +60,16 @@ void ObjectMap::collideBullet(Bullet &bullet){
 	}
 	ball.collide(bullet_object);
 	if(bullet_object.colliding == true){
-		//bullet.check_delete = true;
+		bullet.check_delete = true;
 	}
+}
+
+bool ObjectMap::collideBullet(ObjectSetter &bullet){
+	CollisionObject bullet_object(bullet);
+	for(unsigned int j=0; j<objects.size(); j++){
+		bullet_object.collide(objects[j]);
+	}
+	ball.collide(bullet_object);
+	return bullet_object.colliding;
 }
 	

@@ -17,6 +17,7 @@ class eBullet : public Entity{
 		void collide(ObjectMap &);
 		void move(const float);
 		void getVert(sf::VertexArray&);
+		ObjectSetter getObjectSetter();
 };
 
 #endif

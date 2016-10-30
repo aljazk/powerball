@@ -17,6 +17,7 @@ void Bullet::set(sf::Vector2f new_position, sf::Vector2f new_velocity){
 	setVelocity(new_velocity);
 	life_time = 0;
 	max_life_time = 10;
+	check_delete = false;
 }
 
 void Bullet::setPosition(sf::Vector2f new_position){

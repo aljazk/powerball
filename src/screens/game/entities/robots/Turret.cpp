@@ -21,6 +21,8 @@ void Turret::set(){
 	cooldown_time = 3;
 	fire_speed = 200;
 	id = "turret";
+	addType("robot");
+	addType("turret");
 }
 
 void Turret::collide(ObjectMap &map){
@@ -77,7 +79,6 @@ void Turret::move(const float eclipsed){
 }
 
 void Turret::getVert(sf::VertexArray &vert){
-	
 	//draw bullets
 	for(unsigned int i=0; i<bullets.size(); i++){
 		bullets[i].getVertex(vert);

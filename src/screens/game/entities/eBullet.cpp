@@ -17,10 +17,14 @@ void eBullet::set(sf::Vector2f new_position, sf::Vector2f new_velocity){
 	velocity = new_velocity;
 	life_time = 0;
 	max_life_time = 10;
+	addType("bullet");
 }
 
 void eBullet::collide(ObjectMap &map){
-	//map.collideBullets(bullets);
+	ObjectSetter os = getObjectSetter();
+	if (map.collideBullet(os)){
+		check_delete = true;
+	}
 }
 void eBullet::move(const float eclipsed){
 	position.x += velocity.x * eclipsed;
@@ -36,4 +40,14 @@ void eBullet::getVert(sf::VertexArray& vert){
 	VertQuad quad;
 	quad.set(sf::Vector2f(46,51), sf::Vector2f(8,8), position);
 	quad.add(vert);
+}
+
+ObjectSetter eBullet::getObjectSetter(){
+	ObjectSetter os;
+	os.add(Circle(0,0,4));
+	os.position_x = position.x;
+	os.position_y = position.y;
+	os.velocity_x = velocity.x;
+	os.velocity_y = velocity.y;
+	return os;
 }

@@ -22,7 +22,7 @@ class ObjectMap{
 		void collide();
 		void collideBullets(std::vector<Bullet> &);
 		void collideBullet(Bullet &);
-
+		bool collideBullet(ObjectSetter &);
 };
 
 #endif

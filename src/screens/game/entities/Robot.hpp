@@ -18,10 +18,10 @@ class Robot : public Entity{
 		Robot(const float, const float);
 		Robot(const sf::Vector2f);
 		void set();
-		void collide(ObjectMap &);
-		void move(const float);
+		virtual void collide(ObjectMap &){};
+		virtual void move(const float){};
 		void getVert(sf::VertexArray&);
-		void setBallPosition(const sf::Vector2f);
+		virtual void setBallPosition(const sf::Vector2f){};
 };
 
 #endif

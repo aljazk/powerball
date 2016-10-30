@@ -2,6 +2,7 @@
 #define ENTITY_H
 
 #include <SFML/Graphics.hpp>
+#include <unordered_set>
 #include "../../../draw/VertQuad.hpp"
 #include "../../../collision/ObjectMap.hpp"
 
@@ -10,6 +11,7 @@ class Entity{
 		sf::Vector2f position;
 		bool check_delete;
 		std::unique_ptr<Entity> add_entity;
+		std::unordered_set<std::string> types;
 	public:
 		std::string id;
 		Entity();
@@ -17,11 +19,11 @@ class Entity{
 		virtual void collide(ObjectMap &);
 		virtual void move(const float);
 		virtual void getVert(sf::VertexArray&);
-		virtual void setBallPosition(const sf::Vector2f);
 		virtual std::unique_ptr<Entity> getEntity();
-		virtual bool checkDelete(){
-			return check_delete;
-		}
+		virtual bool checkDelete();
+		virtual void addType(const std::string &);
+		virtual void removeType(const std::string &);
+		virtual bool checkType(const std::string &);
 };
 
 #endif
