@@ -3,7 +3,6 @@
 
 #include "shapes/CollisionObject.hpp"
 #include "Collision.hpp"
-#include "../screens/game/entities/Bullet.hpp"
 #include <vector>
 
 class ObjectMap{
@@ -20,8 +19,8 @@ class ObjectMap{
 		void getVelocity(float &, float &);
 		
 		void collide();
-		void collideBullets(std::vector<Bullet> &);
-		void collideBullet(Bullet &);
+		bool collide(CollisionObject &);
+		bool collideBall(CollisionObject &);
 		bool collideBullet(ObjectSetter &);
 };
 

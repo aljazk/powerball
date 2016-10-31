@@ -100,7 +100,6 @@ void CollisionObject::handleCollision(CollisionObject &o, sf::Vector2f v){ // ad
 	float nm = mass + o.mass;
 	float m1 = mass / nm;
 	float m2 = o.mass / nm;
-	//std::cout << m1 + m2 << "\n";
 	
 	addPosition(v.x * m1, v.y * m1);
 	o.addPosition(-v.x * m2, -v.y * m2);
@@ -109,18 +108,18 @@ void CollisionObject::handleCollision(CollisionObject &o, sf::Vector2f v){ // ad
 	v.x /= l;
 	v.y /= l;
 	
-	float d = v.x * velocity_x + v.y * velocity_y;
-	float v1_x = velocity_x - ((1 + elasticity) * v.x * d);
-	float v1_y = velocity_y - ((1 + elasticity) * v.y * d);
+	//prfect but without mass, each is somehow ok
+	float d1 = abs(v.x * velocity_x + v.y * velocity_y);
+	float d2 = abs(v.x * o.velocity_x + v.y * o.velocity_y);
+	float d = abs(d1 + d2);
 	
-	float v2_x, v2_y;
-	o.getVelocity(v2_x, v2_y);
-	d = v.x * v2_x + v.y * v2_y;
-	v2_x = v2_x - ((1 + o.elasticity) * v.x * d);
-	v2_y = v2_y - ((1 + o.elasticity) * v.y * d);
+    float p1 = (1.0 + elasticity) * d * m1;
+	float p2 = (1.0 + o.elasticity) * d * m2;
 	
-	setVelocity(v1_x, v1_y);
-	o.setVelocity(v2_x, v2_y);
+    velocity_x += v.x * p1;
+    velocity_y += v.y * p1;
+    o.velocity_x += v.x * p2 * -1;
+    o.velocity_y += v.y * p2 * -1;
 }
 
 void CollisionObject::collide(CollisionObject &o){

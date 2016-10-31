@@ -34,7 +34,6 @@ void SinglePlayer::setLevel(const Level &l){
 	}
 	ai.add(std::unique_ptr<Robot>(new Robot()));
 	ai.add(std::unique_ptr<Turret>(new Turret(500,500)));
-	ai.add(std::unique_ptr<eBullet>(new eBullet(100,0, 0.1,0.1)));
 }
 
 void SinglePlayer::run(sf::RenderWindow &window){
@@ -63,7 +62,6 @@ void SinglePlayer::run(sf::RenderWindow &window){
 		float px, py;
 		float vx, vy;
 		ball.move(eclipsed);
-		ai.collide(map);
 		ai.move(eclipsed);
 		ai.check_delete();
 		
@@ -73,6 +71,7 @@ void SinglePlayer::run(sf::RenderWindow &window){
 		ai.setBallPosition(px, py);
 		map.setBall(px, py, vx, vy);
 		map.collide();
+		ai.collide(map);
 		map.getPosition(px, py);
 		map.getVelocity(vx, vy);
 		ball.set(px, py, vx, vy);
@@ -93,6 +92,7 @@ void SinglePlayer::run(sf::RenderWindow &window){
 		level.draw(window);
 		
 		ai.draw(window);
+		ai.add();
 		
 		ball.draw(window);
 		

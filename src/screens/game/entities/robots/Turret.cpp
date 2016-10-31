@@ -25,10 +25,6 @@ void Turret::set(){
 	addType("turret");
 }
 
-void Turret::collide(ObjectMap &map){
-	map.collideBullets(bullets);
-}
-
 float fixAngle(float ang){
 	if (ang > atan(1)*8){
 		ang -= atan(1)*8;
@@ -59,30 +55,13 @@ void Turret::move(const float eclipsed){
 		new_bullet_position.x += cos(turret_angle)*42;
 		new_bullet_position.y += sin(turret_angle)*42;
 		sf::Vector2f new_bullet_velocity = sf::Vector2f(cos(turret_angle)*fire_speed, sin(turret_angle)*fire_speed);
-		Bullet b(new_bullet_position, new_bullet_velocity);
-		bullets.push_back(b);
+		add_entity = std::make_shared<Bullet>(new_bullet_position, new_bullet_velocity);
 		cooldown_time = cooldown;
 		//std::cout << bullets.size() << std::endl;
 	}
-	
-	//move bullets
-	if (bullets.size() > 0){
-		for(unsigned int i=bullets.size()-1; true; i--){
-			if(bullets[i].move(eclipsed)){
-				bullets.erase(bullets.begin()+i);//remove if bullets excists for too long (it droped on the floor)
-			}
-			if (i == 0) break;
-		}
-	}
-	
-	
 }
 
 void Turret::getVert(sf::VertexArray &vert){
-	//draw bullets
-	for(unsigned int i=0; i<bullets.size(); i++){
-		bullets[i].getVertex(vert);
-	}
 	
 	//draw legs
 	VertQuad quad;

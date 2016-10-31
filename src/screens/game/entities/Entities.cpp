@@ -23,12 +23,14 @@ void Entities::loadTexture(const std::string &t_string){
 }
 		
 void Entities::add(std::shared_ptr<Entity> entity) {
-	entities.emplace(entity);
-	if(entity->checkType("robot")){
-		robots.emplace(entity);
-	}
-	if(entity->checkType("bullet")){
-		bullets.emplace(entity);
+	if (entity){
+		entities.emplace(entity);
+		if(entity->checkType("robot")){
+			robots.emplace(entity);
+		}
+		if(entity->checkType("bullet")){
+			bullets.emplace(entity);
+		}
 	}
 }
 
@@ -41,8 +43,9 @@ void Entities::check_delete(){
 }
 
 void Entities::collide(ObjectMap &map){
-	for (const auto& e: entities){
-		e->collide(map);
+	for (const auto& e: bullets){
+		std::shared_ptr<Bullet> b = std::dynamic_pointer_cast<Bullet>(e);
+		b->collide(map);
 	}
 }
 

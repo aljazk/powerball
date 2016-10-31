@@ -6,8 +6,6 @@
 #include "../../../collision/ObjectMap.hpp"
 #include <cmath>
 
-#include "Bullet.hpp"
-
 class Robot : public Entity{
 	protected:
 		float health, max_health;
@@ -18,7 +16,6 @@ class Robot : public Entity{
 		Robot(const float, const float);
 		Robot(const sf::Vector2f);
 		void set();
-		virtual void collide(ObjectMap &){};
 		virtual void move(const float){};
 		void getVert(sf::VertexArray&);
 		virtual void setBallPosition(const sf::Vector2f){};

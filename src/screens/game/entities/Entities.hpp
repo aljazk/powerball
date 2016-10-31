@@ -8,7 +8,7 @@
 
 #include "Entity.hpp"
 #include "Robot.hpp"
-#include "eBullet.hpp"
+#include "Bullet.hpp"
 
 #include "robots/Turret.hpp"
 

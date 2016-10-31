@@ -33,43 +33,25 @@ void ObjectMap::getVelocity(float &x, float &y){
 		
 void ObjectMap::collide(){
 	for(unsigned int i=0; i<objects.size(); i++){
-		ball.collide(objects[i]);//unexpected crash happens after random time
+		ball.collide(objects[i]);
 	}
 }
 
-void ObjectMap::collideBullets(std::vector<Bullet> &bullets){
-	if (bullets.size() > 0){
-		for(unsigned int i=0; i<bullets.size(); i++){
-			collideBullet(bullets[i]);
-		}
+bool ObjectMap::collide(CollisionObject &obj){
+	for(unsigned int i=0; i<objects.size(); i++){
+		obj.collide(objects[i]);
 	}
-	if (bullets.size() > 0){
-		for (unsigned int i = bullets.size(); i-- > 0; ){
-			if (bullets[i].check_delete){
-				bullets.erase(bullets.begin()+i);
-			}
-		}
-	}
+	return obj.colliding;
 }
 
-void ObjectMap::collideBullet(Bullet &bullet){
-	ObjectSetter os = bullet.getObjectSetter();
-	CollisionObject bullet_object(os);
-	for(unsigned int j=0; j<objects.size(); j++){
-		bullet_object.collide(objects[j]);
-	}
-	ball.collide(bullet_object);
-	if(bullet_object.colliding == true){
-		bullet.check_delete = true;
-	}
-}
-
-bool ObjectMap::collideBullet(ObjectSetter &bullet){
-	CollisionObject bullet_object(bullet);
-	for(unsigned int j=0; j<objects.size(); j++){
-		bullet_object.collide(objects[j]);
-	}
-	ball.collide(bullet_object);
-	return bullet_object.colliding;
+bool ObjectMap::collideBall(CollisionObject &obj){
+	ball.collide(obj);
+	return obj.colliding;
 }
 	
+bool ObjectMap::collideBullet(ObjectSetter &bullet){
+	CollisionObject bullet_object(bullet);
+	collide(bullet_object);
+	collideBall(bullet_object);
+	return bullet_object.colliding;
+}

@@ -2,6 +2,7 @@
 #define TURRET_H
 
 #include "../Robot.hpp"
+#include "../Bullet.hpp"
 #include <vector>
 
 class Turret : public Robot{
@@ -9,17 +10,14 @@ class Turret : public Robot{
 		float turret_angle, turret_speed;
 		float fire_speed;
 		float cooldown, cooldown_time;
-		std::vector<Bullet> bullets;
 	public:
 		Turret();
 		Turret(const float, const float);
 		Turret(const sf::Vector2f);
 		void set();
-		void collide(ObjectMap &);
 		void move(const float);
 		void getVert(sf::VertexArray&);
 		void setBallPosition(const sf::Vector2f);
-
 };
 
 #endif

@@ -13,38 +13,57 @@ Bullet::Bullet(const float px, const float py, const float vx, const float vy){
 }
 
 void Bullet::set(sf::Vector2f new_position, sf::Vector2f new_velocity){
-	setPosition(new_position);
-	setVelocity(new_velocity);
+	position = new_position;
+	velocity = new_velocity;
 	life_time = 0;
 	max_life_time = 10;
-	check_delete = false;
+	addType("bullet");
+	dying = false;
 }
 
-void Bullet::setPosition(sf::Vector2f new_position){
-	position = new_position;
+void Bullet::collide(ObjectMap &map){
+	ObjectSetter os = getObjectSetter();
+	CollisionObject bullet_object(os);
+	map.collide(bullet_object);
+	if(bullet_object.colliding){
+		float px, py, vx, vy;
+		bullet_object.getPosition(px, py);
+		bullet_object.getVelocity(vx, vy);
+		set(sf::Vector2f(px, py), sf::Vector2f(vx, vy));
+		dying = true;
+		life_time = max_life_time-1;
+	}
+	if(!dying){
+		map.collideBall(bullet_object);
+		if(bullet_object.colliding){
+			float px, py, vx, vy;
+			bullet_object.getPosition(px, py);
+			bullet_object.getVelocity(vx, vy);
+			set(sf::Vector2f(px, py), sf::Vector2f(vx, vy));
+			dying = true;
+			life_time = max_life_time-1;
+		}
+	}
 }
 
-void Bullet::setVelocity(sf::Vector2f new_velocity){
-	velocity = new_velocity;
-}
-
-
-void Bullet::getVertex(sf::VertexArray& vert){
-	VertQuad quad;
-	quad.set(sf::Vector2f(46,51), sf::Vector2f(8,8), position);
-	quad.add(vert);
-}
-
-bool Bullet::move(float eclipsed){
+void Bullet::move(const float eclipsed){
 	position.x += velocity.x * eclipsed;
 	position.y += velocity.y * eclipsed;
 	life_time += eclipsed;
 	//std::cout << life_time << std::endl;
 	if(life_time > max_life_time){
-		return true;
-	} else {
-		return false;
+		check_delete = true;
 	}
+}
+
+void Bullet::getVert(sf::VertexArray& vert){
+	VertQuad quad;
+	quad.set(sf::Vector2f(46,51), sf::Vector2f(8,8), position);
+	if(dying){
+		int fade = (max_life_time - life_time) * 255;
+		quad.setColor(sf::Color(255,255,255, fade));
+	}
+	quad.add(vert);
 }
 
 ObjectSetter Bullet::getObjectSetter(){
@@ -54,5 +73,7 @@ ObjectSetter Bullet::getObjectSetter(){
 	os.position_y = position.y;
 	os.velocity_x = velocity.x;
 	os.velocity_y = velocity.y;
+	os.elasticity = 0.1;
+	os.mass = 10;
 	return os;
 }
