@@ -94,32 +94,29 @@ void CollisionObject::move(const float eclipsed){
 	}
 }
 
-void CollisionObject::handleCollision(CollisionObject &o, sf::Vector2f v){ // add friction
-	//std::cout << "v: " << v.x << " " << v.y << "\n";
-	
+void CollisionObject::handleCollision(CollisionObject &o, sf::Vector2f v){ // no friction
 	float nm = mass + o.mass;
 	float m1 = mass / nm;
 	float m2 = o.mass / nm;
-	
+
 	addPosition(v.x * m1, v.y * m1);
 	o.addPosition(-v.x * m2, -v.y * m2);
-	
+
 	float l = sqrt(pow(v.x,2) + pow(v.y,2));
 	v.x /= l;
 	v.y /= l;
-	
-	//prfect but without mass, each is somehow ok
+
 	float d1 = abs(v.x * velocity_x + v.y * velocity_y);
 	float d2 = abs(v.x * o.velocity_x + v.y * o.velocity_y);
 	float d = abs(d1 + d2);
-	
-    float p1 = (1.0 + elasticity) * d * m1;
+
+	float p1 = (1.0 + elasticity) * d * m1;
 	float p2 = (1.0 + o.elasticity) * d * m2;
-	
-    velocity_x += v.x * p1;
-    velocity_y += v.y * p1;
-    o.velocity_x += v.x * p2 * -1;
-    o.velocity_y += v.y * p2 * -1;
+
+	velocity_x += v.x * p1;
+	velocity_y += v.y * p1;
+	o.velocity_x += v.x * p2 * -1;
+	o.velocity_y += v.y * p2 * -1;
 }
 
 void CollisionObject::collide(CollisionObject &o){

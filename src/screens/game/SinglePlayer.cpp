@@ -17,6 +17,8 @@ SinglePlayer::SinglePlayer(){
 	ObjectSetter os;
 	os.add(Circle(0,0,25));
 	map.set(CollisionObject(os));
+	std::shared_ptr<Ball> ptr_ball (&ball);
+	map.set(ptr_ball);
 }
 
 void SinglePlayer::createGUI(){
@@ -59,12 +61,11 @@ void SinglePlayer::run(sf::RenderWindow &window){
         window.clear(sf::Color::Black);
 		
 		//game step
-		float px, py;
-		float vx, vy;
 		ball.move(eclipsed);
 		ai.move(eclipsed);
 		ai.check_delete();
 		
+		/*
 		ball.getPosition(px, py);
 		ball.getVelocity(vx, vy);
 		cam.pos(px, py);
@@ -75,6 +76,12 @@ void SinglePlayer::run(sf::RenderWindow &window){
 		map.getPosition(px, py);
 		map.getVelocity(vx, vy);
 		ball.set(px, py, vx, vy);
+		*/
+		
+		cam.pos(ball.getPosition());
+		ai.setBallPosition(ball.getPosition());
+		map.collide();
+		ai.collide(map);
 		
 		// draw background
 		sf::VertexArray backVert(sf::Quads);

@@ -20,10 +20,19 @@ void Ball::getPosition(float &x, float &y){
 	y = position_y;
 }
 
+sf::Vector2f Ball::getPosition(){
+	return sf::Vector2f(position_x, position_y);
+}
+
 void Ball::getVelocity(float &x, float &y){
 	x = velocity_x;
 	y = velocity_y;
 }
+
+sf::Vector2f Ball::getVelocity(){
+	return sf::Vector2f(velocity_x, velocity_y);
+}
+
 
 void Ball::move(const float eclipsed){
 	//use eclipsed time right

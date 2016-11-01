@@ -15,7 +15,9 @@ class Ball{
 		Ball();
 		void set(float, float, float, float);
 		void getPosition(float &, float &);
+		sf::Vector2f getPosition();
 		void getVelocity(float &, float &);
+		sf::Vector2f getVelocity();
 		void move(const float);
 		void draw(sf::RenderWindow &);
 

@@ -9,10 +9,11 @@ class Camera{
 		unsigned int window_size_x, window_size_y;
 	public:
 		Camera();
-		Camera(unsigned int, unsigned int);
-		void set(unsigned int x, unsigned int y);
-		void setWindowSize(unsigned int, unsigned int);
+		Camera(const unsigned int, const unsigned int);
+		void set(const unsigned int x, const unsigned int y);
+		void setWindowSize(const unsigned int, const unsigned int);
 		void pos(const float, const float);
+		void pos(const sf::Vector2f);
 		sf::View get();
 };
 

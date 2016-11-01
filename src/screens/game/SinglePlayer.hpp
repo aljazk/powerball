@@ -12,6 +12,7 @@
 #include "level/Level.hpp"
 #include "Camera.hpp"
 #include <iostream>
+#include <memory>
 
 class SinglePlayer{
 		std::string action;
