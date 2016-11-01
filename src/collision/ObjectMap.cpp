@@ -14,12 +14,14 @@ void ObjectMap::set(const std::shared_ptr<Ball> set_ball){
 
 void ObjectMap::add(const CollisionObject &o){
 	objects.push_back(o);
+	std::cout << objects.size() << std::endl;
 }
 
 void ObjectMap::add(const std::vector<CollisionObject> &o){
 	for(unsigned int i=0; i<o.size(); i++){
 		objects.push_back(o[i]);
 	}
+	std::cout << objects.size() << std::endl;
 }
 
 void ObjectMap::setBall(float px, float py, float vx, float vy){

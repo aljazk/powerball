@@ -17,20 +17,15 @@ void Normals::add(std::vector<float> x, std::vector<float> y){
 void Normals::add(const Normal &new_normal){
 	Normal n = new_normal;
 	if(!checkSame(n)){
-		normals.push_back(new_normal);
+		normals.emplace(std::make_shared<Normal>(new_normal));
 	}
 }
-
-void Normals::set(const std::vector<Normal> &new_normal){
-	normals = new_normal;
-}
-
 bool Normals::checkSame(Normal &c_normal){
-	for(unsigned int i=0; i<normals.size(); i++){
-		if (c_normal.getX() == normals[i].getX() && c_normal.getY() == normals[i].getY()){
+	for (const auto& n: normals){
+		if (c_normal.getX() == n->getX() && c_normal.getY() == n->getY()){
 			return true;
 		}
-		if (c_normal.getX() == -normals[i].getX() && c_normal.getY() == -normals[i].getY()){
+		if (c_normal.getX() == -n->getX() && c_normal.getY() == -n->getY()){
 			return true;
 		}
 	}
@@ -42,8 +37,8 @@ void Normals::clear(){
 }
 
 void Normals::draw(sf::RenderWindow& window){
-	for(unsigned int i=0; i<normals.size(); i++){
-		normals[i].draw(window);
+	for (const auto& n: normals){
+		n->draw(window);
 	}
 }
 
@@ -67,14 +62,14 @@ bool Normals::checkCollision(){
 	}
 	add(x, y);
 	bool center = false;
-	for(unsigned int i=0; i<normals.size(); i++){
-		normals[i].addObject(p1.getX(), p1.getY());
+	for (const auto& n: normals){
+		n->setObject1(p1.getX(), p1.getY());
 		if(!circle_set){
-			normals[i].addObject(p2.getX(), p2.getY());
+			n->setObject2(p2.getX(), p2.getY());
 		} else {
-			normals[i].addObject(c.getX(), c.getY(), c.getR());
+			n->setObject2(c.getX(), c.getY(), c.getR());
 		}
-		if (!normals[i].checkCollision(center)){
+		if (!n->checkCollision(center)){
 			return false;
 		}
 	}
@@ -103,15 +98,15 @@ sf::Vector2f Normals::collision(){
 	add(x, y);
 	float dist = FLT_MAX;
 	sf::Vector2f return_v;
-	for(unsigned int i=0; i<normals.size(); i++){
-		normals[i].addObject(p1.getX(), p1.getY());
+	for (const auto& n: normals){
+		n->setObject1(p1.getX(), p1.getY());
 		if(!circle_set){
-			normals[i].addObject(p2.getX(), p2.getY());
+			n->setObject2(p2.getX(), p2.getY());
 		} else {
-			normals[i].addObject(c.getX(), c.getY(), c.getR());
+			n->setObject2(c.getX(), c.getY(), c.getR());
 		}
 		bool coll = false; bool update = false;
-		sf::Vector2f v = normals[i].collision(dist, coll, update); //doesnt return right direction
+		sf::Vector2f v = n->collision(dist, coll, update); //doesnt return right direction
 		//std::cout << "\nv: " << v.x << " " << v.y << "\n";
 		if (!coll){
 			return v;

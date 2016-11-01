@@ -17,7 +17,7 @@ Turret::Turret(const sf::Vector2f new_position){
 void Turret::set(){
 	turret_angle = 0;
 	turret_speed = 1;
-	cooldown = 0.1;
+	cooldown = 0.5;
 	cooldown_time = 3;
 	fire_speed = 200;
 	id = "turret";

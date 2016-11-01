@@ -30,12 +30,21 @@ void SinglePlayer::setLevel(const Level &l){
 	level = l;
 	ObjectSetter os = level.getWallObject();
 	map.add(CollisionObject(os));
-	for(unsigned int i=0; i<10; i++){
-		for(unsigned int j=0; j<10; j++){
+	for(unsigned int i=300; i<1100; i+=100){
+		for(unsigned int j=200; j<600; j+=100){
+			//ai.add(std::unique_ptr<Turret>(new Turret(i,j)));
 		}
 	}
 	ai.add(std::unique_ptr<Robot>(new Robot()));
 	ai.add(std::unique_ptr<Turret>(new Turret(500,500)));
+}
+
+void SinglePlayer::collide(){
+	while (true){
+		map.collide();
+		ai.collide(map);
+		sf::sleep(sf::milliseconds(10));
+	}
 }
 
 void SinglePlayer::run(sf::RenderWindow &window){
@@ -46,8 +55,15 @@ void SinglePlayer::run(sf::RenderWindow &window){
 	
 	clock.restart();
 	
+	float lowest_fps = 3000;
+	unsigned int low_spikes = 0;
+	
+	sf::Thread collide_thread(&collide, this);
+	//collide_thread.launch();
+	
 	// start loop
     while (window.isOpen()){
+		
         // check all the window's events that were triggered since the last iteration of the loop
         sf::Event event;
         while (window.pollEvent(event)){
@@ -64,6 +80,8 @@ void SinglePlayer::run(sf::RenderWindow &window){
 		ball.move(eclipsed);
 		ai.move(eclipsed);
 		ai.check_delete();
+		map.collide();
+		ai.collide(map);
 		
 		/*
 		ball.getPosition(px, py);
@@ -80,8 +98,6 @@ void SinglePlayer::run(sf::RenderWindow &window){
 		
 		cam.pos(ball.getPosition());
 		ai.setBallPosition(ball.getPosition());
-		map.collide();
-		ai.collide(map);
 		
 		// draw background
 		sf::VertexArray backVert(sf::Quads);
@@ -108,7 +124,8 @@ void SinglePlayer::run(sf::RenderWindow &window){
 		window.setView(window.getDefaultView());
 		gui.draw(window, eclipsed);
 		
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::P)){
+		
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::P) || sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)){
 			action = "pause";
 		}
 		
@@ -127,7 +144,9 @@ void SinglePlayer::run(sf::RenderWindow &window){
 		eclipsed = clock.restart().asSeconds();
 		// display fps
 		std::ostringstream s;
-		s << 1.f/eclipsed << std::endl;
+		if(1.0/eclipsed < lowest_fps) lowest_fps = 1.0/eclipsed;
+		if (1.0/eclipsed < 60.0) low_spikes ++;
+		s << "fps: " << 1.0/eclipsed << "\nlowest fps: " << lowest_fps << "\nlow spikes: " << low_spikes << std::endl;
 		text.setString(s.str());
 		text.setCharacterSize(10);
 		text.setFillColor(sf::Color::White);
@@ -151,6 +170,6 @@ void SinglePlayer::run(sf::RenderWindow &window){
 		run(window);
 	}
 	if (action == "tomenu"){//back to menu somehow ._.
-		
+		collide_thread.terminate();
 	}
 }

@@ -11,7 +11,7 @@ int main(){
     sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "My window", sf::Style::Default, settings);
 	window.setPosition(sf::Vector2i(500, 0));
 	//window.setVerticalSyncEnabled(false);
-	window.setFramerateLimit(120);
+	//window.setFramerateLimit(120);
 	//window.setKeyRepeatEnabled(false);
 	std::cout << "Creating Main Manu" << std::endl;
 	//start the game

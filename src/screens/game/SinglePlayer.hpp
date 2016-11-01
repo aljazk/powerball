@@ -28,6 +28,8 @@ class SinglePlayer{
 		ObjectMap map;
 		Ball ball;
 		Entities ai;
+		void collide();
+		sf::Mutex mutex;
 	public:
 		SinglePlayer();
 		void setLevel(const Level &);

@@ -11,6 +11,7 @@ class NormalObject{
 		std::vector<float> x, y;
 	public:
 		float min, max;
+		NormalObject();
 		NormalObject(const std::vector<float>, const std::vector<float>, float, float);
 		NormalObject(float, float, float, float, float);
 		void set(const std::vector<float>, const std::vector<float>, float, float);

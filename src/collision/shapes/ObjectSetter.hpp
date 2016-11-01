@@ -4,6 +4,8 @@
 #include "Polygon.hpp"
 #include "Circle.hpp"
 #include <vector>
+#include <unordered_set>
+#include <memory>
 
 class ObjectSetter{
 		std::vector<Polygon> polygons;
@@ -22,6 +24,8 @@ class ObjectSetter{
 		
 		std::vector<Polygon> getPolygons();
 		std::vector<Circle> getCircles();
+		std::unordered_set<std::shared_ptr<Polygon>> getPolygons1();
+		std::unordered_set<std::shared_ptr<Circle>> getCircles1();
 };
 
 #endif

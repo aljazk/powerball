@@ -31,7 +31,7 @@ void Entities::add(std::shared_ptr<Entity> entity) {
 		if(entity->checkType("bullet")){
 			bullets.emplace(entity);
 		}
-		std::cout << "entities: "<< entities.size() << std::endl;
+		//std::cout << "entities: "<< entities.size() << std::endl;
 	}
 }
 
@@ -39,7 +39,7 @@ void Entities::check_delete(){
 	for (const auto& e: entities){
 		if (e->checkDelete()){
 			entities.erase(e);
-			std::cout << "entities: "<< entities.size() << std::endl;
+			//std::cout << "entities: "<< entities.size() << std::endl;
 		}
 	}
 }

@@ -1,5 +1,9 @@
 #include "NormalObject.hpp"
 
+NormalObject::NormalObject(){
+	set(0,0,0,0, 0);
+}
+
 NormalObject::NormalObject(const std::vector<float> px, const std::vector<float> py, float nx, float ny){
 	set(px, py, nx, ny);
 }

@@ -10,7 +10,7 @@
 class NormalObject;
 class Normal{
 		float normal_x, normal_y;
-		std::vector<NormalObject> objects;
+		NormalObject object1, object2;
 		void projectVector(float &, float &);
 	public:
 		Normal();
@@ -18,8 +18,10 @@ class Normal{
 		void set(const float, const float);
 		float getX();
 		float getY();
-		void addObject(std::vector<float>, std::vector<float>);
-		void addObject(float, float, float);
+		void setObject1(std::vector<float>, std::vector<float>);
+		void setObject1(float, float, float);
+		void setObject2(std::vector<float>, std::vector<float>);
+		void setObject2(float, float, float);
 		void draw(sf::RenderWindow&);
 		//bool checkCollision();
 		bool checkCollision();

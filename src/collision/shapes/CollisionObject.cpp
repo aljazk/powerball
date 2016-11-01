@@ -24,6 +24,7 @@ void CollisionObject::reset(){
 	rotation = 0;
 	mass = 1, elasticity = 1;
 	id = 0;
+	colliding = false;
 }
 
 void CollisionObject::set(ObjectSetter &setter){
@@ -34,6 +35,7 @@ void CollisionObject::set(ObjectSetter &setter){
 	velocity_x = setter.velocity_x, velocity_y = setter.velocity_y;
 	rotation = setter.rotation;
 	mass = setter.mass, elasticity = setter.elasticity;
+	colliding = false;
 }
 
 void CollisionObject::clear(){
