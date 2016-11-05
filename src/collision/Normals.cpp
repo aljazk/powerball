@@ -106,7 +106,7 @@ sf::Vector2f Normals::collision(){
 			n->setObject2(c.getX(), c.getY(), c.getR());
 		}
 		bool coll = false; bool update = false;
-		sf::Vector2f v = n->collision(dist, coll, update); //doesnt return right direction
+		sf::Vector2f v = n->collision(dist, coll, update);
 		//std::cout << "\nv: " << v.x << " " << v.y << "\n";
 		if (!coll){
 			return v;
@@ -121,6 +121,7 @@ sf::Vector2f Normals::collision(){
 		sf::Vector2f cv = Collision::get(c, cc);
 		if (cv.x != 0 && cv.y != 0){ // may fail
 			//std::cout << " set ";
+			std::cout << "edge " << cv.x << " " << cv.y << std::endl;
 			return_v = cv;
 		}
 	}

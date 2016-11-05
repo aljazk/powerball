@@ -1,14 +1,14 @@
 #include "ObjectMap.hpp"
 
 ObjectMap::ObjectMap(){
-
+	
 }
 
 void ObjectMap::set(const CollisionObject &o){
 	ball = o;
 }
 
-void ObjectMap::set(const std::shared_ptr<Ball> set_ball){
+void ObjectMap::set(const std::shared_ptr<Ball> &set_ball){
 	ptr_ball = set_ball;
 }
 
@@ -38,17 +38,21 @@ void ObjectMap::getVelocity(float &x, float &y){
 }
 
 void ObjectMap::updateObject(){
-	float px, py, vx, vy;
-	ptr_ball->getPosition(px, py);
-	ptr_ball->getVelocity(vx, vy);
-	ball.setPosition(px, py);
-	ball.setVelocity(vx, vy);
+	if (ptr_ball){
+		float px, py, vx, vy;
+		ptr_ball->getPosition(px, py);
+		ptr_ball->getVelocity(vx, vy);
+		ball.setPosition(px, py);
+		ball.setVelocity(vx, vy);
+	}
 }
 void ObjectMap::updatePtr(){
-	float px, py, vx, vy;
-	ball.getPosition(px, py);
-	ball.getVelocity(vx, vy);
-	ptr_ball->set(px, py, vx, vy);
+	if (ptr_ball){
+		float px, py, vx, vy;
+		ball.getPosition(px, py);
+		ball.getVelocity(vx, vy);
+		ptr_ball->set(px, py, vx, vy);
+	}
 }
 		
 void ObjectMap::collide(){

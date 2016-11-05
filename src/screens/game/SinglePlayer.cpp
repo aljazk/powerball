@@ -1,5 +1,9 @@
 #include "SinglePlayer.hpp"
 
+void ndelete(Ball *){
+	return;
+}
+
 SinglePlayer::SinglePlayer(){
 	back.loadFromFile("images/menu_background.png");
 	backSize = back.getSize();
@@ -17,7 +21,7 @@ SinglePlayer::SinglePlayer(){
 	ObjectSetter os;
 	os.add(Circle(0,0,25));
 	map.set(CollisionObject(os));
-	std::shared_ptr<Ball> ptr_ball (&ball);
+	std::shared_ptr<Ball> ptr_ball (&ball, ndelete);
 	map.set(ptr_ball);
 }
 
@@ -30,11 +34,6 @@ void SinglePlayer::setLevel(const Level &l){
 	level = l;
 	ObjectSetter os = level.getWallObject();
 	map.add(CollisionObject(os));
-	for(unsigned int i=300; i<1100; i+=100){
-		for(unsigned int j=200; j<600; j+=100){
-			//ai.add(std::unique_ptr<Turret>(new Turret(i,j)));
-		}
-	}
 	ai.add(std::unique_ptr<Robot>(new Robot()));
 	ai.add(std::unique_ptr<Turret>(new Turret(500,500)));
 }
@@ -54,12 +53,18 @@ void SinglePlayer::run(sf::RenderWindow &window){
 	
 	
 	clock.restart();
+	sf::Clock bug_clock;
+	bug_clock.restart();
+	float move_time = 0;
+	float collide_time = 0;
+	float rest_time = 0;
 	
 	float lowest_fps = 3000;
 	unsigned int low_spikes = 0;
 	
 	sf::Thread collide_thread(&collide, this);
 	//collide_thread.launch();
+
 	
 	// start loop
     while (window.isOpen()){
@@ -68,6 +73,7 @@ void SinglePlayer::run(sf::RenderWindow &window){
         sf::Event event;
         while (window.pollEvent(event)){
             if (event.type == sf::Event::Closed){
+				collide_thread.terminate();
                 window.close();
 				break;
 			}
@@ -77,11 +83,23 @@ void SinglePlayer::run(sf::RenderWindow &window){
         window.clear(sf::Color::Black);
 		
 		//game step
+		bug_clock.restart();
+		move_time = 0;
+		
 		ball.move(eclipsed);
 		ai.move(eclipsed);
+		
+		move_time = bug_clock.restart().asSeconds();
+		
 		ai.check_delete();
+		
+		bug_clock.restart();
+		collide_time = 0;
+		
 		map.collide();
 		ai.collide(map);
+		
+		collide_time = bug_clock.restart().asSeconds();
 		
 		/*
 		ball.getPosition(px, py);
@@ -95,6 +113,9 @@ void SinglePlayer::run(sf::RenderWindow &window){
 		map.getVelocity(vx, vy);
 		ball.set(px, py, vx, vy);
 		*/
+		
+		bug_clock.restart();
+		rest_time = 0;
 		
 		cam.pos(ball.getPosition());
 		ai.setBallPosition(ball.getPosition());
@@ -140,13 +161,17 @@ void SinglePlayer::run(sf::RenderWindow &window){
 			break;
 		}
 		
+		rest_time = bug_clock.restart().asSeconds();
+		
 		// end the current frame
 		eclipsed = clock.restart().asSeconds();
 		// display fps
 		std::ostringstream s;
 		if(1.0/eclipsed < lowest_fps) lowest_fps = 1.0/eclipsed;
 		if (1.0/eclipsed < 60.0) low_spikes ++;
-		s << "fps: " << 1.0/eclipsed << "\nlowest fps: " << lowest_fps << "\nlow spikes: " << low_spikes << std::endl;
+		s << "fps: " << 1.0/eclipsed;
+		s  << "\nlowest fps: " << lowest_fps << "\nlow spikes: " << low_spikes;
+		s << "\nmove time: " << move_time << "\ncollide time: " << collide_time  << "\nrest time: " << rest_time;
 		text.setString(s.str());
 		text.setCharacterSize(10);
 		text.setFillColor(sf::Color::White);
@@ -170,6 +195,7 @@ void SinglePlayer::run(sf::RenderWindow &window){
 		run(window);
 	}
 	if (action == "tomenu"){//back to menu somehow ._.
-		collide_thread.terminate();
+		
 	}
+	collide_thread.terminate();
 }

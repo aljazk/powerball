@@ -1,3 +1,0 @@
-collision wrong with edges of polygons
-bullet collision is too expansive
-crash unppon leaving to main menu / closing game

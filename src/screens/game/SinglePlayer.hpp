@@ -29,7 +29,6 @@ class SinglePlayer{
 		Ball ball;
 		Entities ai;
 		void collide();
-		sf::Mutex mutex;
 	public:
 		SinglePlayer();
 		void setLevel(const Level &);

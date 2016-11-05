@@ -39,15 +39,18 @@ void Entities::check_delete(){
 	for (const auto& e: entities){
 		if (e->checkDelete()){
 			entities.erase(e);
-			//std::cout << "entities: "<< entities.size() << std::endl;
+			robots.erase(e);
+			bullets.erase(e);
 		}
 	}
 }
 
 void Entities::collide(ObjectMap &map){
+	unsigned int n = 0;
 	for (const auto& e: bullets){
 		std::shared_ptr<Bullet> b = std::dynamic_pointer_cast<Bullet>(e);
 		b->collide(map);
+		n++;
 	}
 }
 

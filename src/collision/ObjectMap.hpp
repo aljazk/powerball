@@ -16,7 +16,7 @@ class ObjectMap{
 	public:
 		ObjectMap();
 		void set(const CollisionObject &);
-		void set(const std::shared_ptr<Ball>);
+		void set(const std::shared_ptr<Ball> &);
 		void add(const CollisionObject &);
 		void add(const std::vector<CollisionObject> &);
 				

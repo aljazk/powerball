@@ -97,7 +97,7 @@ void CollisionObject::move(const float eclipsed){
 }
 
 void CollisionObject::handleCollision(CollisionObject &o, sf::Vector2f v){ // no friction
-	float nm = mass + o.mass;
+	float nm = mass + o.mass - 0.01;
 	float m1 = mass / nm;
 	float m2 = o.mass / nm;
 
