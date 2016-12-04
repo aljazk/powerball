@@ -16,6 +16,7 @@ class Wall{
 		void add(sf::Vector2f);
 		std::string get();
 		Polygon getPoly();
+		std::vector<sf::Vector2f> getVert();
 		void getVert(sf::VertexArray &);
 
 };
