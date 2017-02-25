@@ -45,9 +45,17 @@ Polygon Wall::getPoly(){
 	return p;
 }
 
+std::vector<sf::Vector2f> Wall::getVert(){
+	std::vector<sf::Vector2f> return_walls;
+	for(unsigned int i=0; i<x.size(); i++){
+		return_walls.push_back(sf::Vector2f(x[i], y[i]));
+	}
+	return return_walls;
+}
+		
 void Wall::getVert(sf::VertexArray &vert){
 	sf::Vertex v;
-	v.color = sf::Color::White;
+	v.color = sf::Color(100,100,100,255);
 	for(unsigned int i=0; i<x.size(); i++){
 		v.position.x = x[i];
 		v.position.y = y[i];

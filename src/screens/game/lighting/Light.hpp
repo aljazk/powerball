@@ -20,7 +20,7 @@ class Light{
 		void setSize(const float);
 		void setColor(const sf::Color &);
 		void getVert(sf::VertexArray &);
-		const sf::Vector2f getPosition(){
+		sf::Vector2f getPosition(){
 			return sf::Vector2f(x,y);
 		}
 };
