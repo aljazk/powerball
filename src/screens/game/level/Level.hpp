@@ -26,9 +26,6 @@ class Level{
 		
 		void addWall(std::string);
 		void addWall(const std::vector<sf::Vector2f> &);
-		const std::vector<Wall> & getWalls(){
-			return walls;
-		}
 		ObjectSetter getWallObject();
 };
 

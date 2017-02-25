@@ -9,7 +9,6 @@
 #include "../../collision/ObjectMap.hpp"
 #include "ball/Ball.hpp"
 #include "entities/Entities.hpp"
-#include "lighting/Lighting.hpp"
 #include "level/Level.hpp"
 #include "Camera.hpp"
 #include <iostream>
@@ -28,8 +27,7 @@ class SinglePlayer{
 		Level level;
 		ObjectMap map;
 		Ball ball;
-		Entities entities;
-		Lighting lighting;
+		Entities ai;
 		void collide();
 	public:
 		SinglePlayer();

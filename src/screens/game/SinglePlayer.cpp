@@ -31,30 +31,17 @@ void SinglePlayer::createGUI(){
 }
 
 void SinglePlayer::setLevel(const Level &l){
-	//load map objects
 	level = l;
 	ObjectSetter os = level.getWallObject();
 	map.add(CollisionObject(os));
-	lighting.setWalls(level.getWalls());
-	
-	//load entities
-	entities.add(std::unique_ptr<Robot>(new Robot()));
-	entities.add(std::unique_ptr<Turret>(new Turret(500,500)));	
-	
-	//setup lighting
-	Light light;
-	light.set(0,0, 1500, sf::Color::White);
-	lighting.addLight(light);
-	light.set(1280/3,720/2, 1500, sf::Color::White);
-	lighting.addStaticLight(light);
-	light.set(1280*2/3,720/2, 1500, sf::Color::White);
-	lighting.addStaticLight(light);
+	ai.add(std::unique_ptr<Robot>(new Robot()));
+	ai.add(std::unique_ptr<Turret>(new Turret(500,500)));
 }
 
 void SinglePlayer::collide(){
 	while (true){
 		map.collide();
-		entities.collide(map);
+		ai.collide(map);
 		sf::sleep(sf::milliseconds(10));
 	}
 }
@@ -85,10 +72,8 @@ void SinglePlayer::run(sf::RenderWindow &window){
         // check all the window's events that were triggered since the last iteration of the loop
         sf::Event event;
         while (window.pollEvent(event)){
-			if (event.type == sf::Event::MouseMoved){
-				lighting.setPosition(window.mapPixelToCoords(sf::Vector2i(event.mouseMove.x, event.mouseMove.y), cam.get()));
-			}
             if (event.type == sf::Event::Closed){
+				collide_thread.terminate();
                 window.close();
 				break;
 			}
@@ -102,17 +87,17 @@ void SinglePlayer::run(sf::RenderWindow &window){
 		move_time = 0;
 		
 		ball.move(eclipsed);
-		entities.move(eclipsed);
+		ai.move(eclipsed);
 		
 		move_time = bug_clock.restart().asSeconds();
 		
-		entities.check_delete();
+		ai.check_delete();
 		
 		bug_clock.restart();
 		collide_time = 0;
 		
 		map.collide();
-		entities.collide(map);
+		ai.collide(map);
 		
 		collide_time = bug_clock.restart().asSeconds();
 		
@@ -120,10 +105,10 @@ void SinglePlayer::run(sf::RenderWindow &window){
 		ball.getPosition(px, py);
 		ball.getVelocity(vx, vy);
 		cam.pos(px, py);
-		entities.setBallPosition(px, py);
+		ai.setBallPosition(px, py);
 		map.setBall(px, py, vx, vy);
 		map.collide();
-		entities.collide(map);
+		ai.collide(map);
 		map.getPosition(px, py);
 		map.getVelocity(vx, vy);
 		ball.set(px, py, vx, vy);
@@ -133,7 +118,7 @@ void SinglePlayer::run(sf::RenderWindow &window){
 		rest_time = 0;
 		
 		cam.pos(ball.getPosition());
-		entities.setBallPosition(ball.getPosition());
+		ai.setBallPosition(ball.getPosition());
 		
 		// draw background
 		sf::VertexArray backVert(sf::Quads);
@@ -148,14 +133,12 @@ void SinglePlayer::run(sf::RenderWindow &window){
 		
 		window.setView(cam.get());
 		
-		entities.draw(window);
-		entities.add();
+		level.draw(window);
+		
+		ai.draw(window);
+		ai.add();
 		
 		ball.draw(window);
-		
-		lighting.draw(window);
-		
-		level.draw(window);
 		
 		action = gui.check(window);
 		
@@ -199,7 +182,7 @@ void SinglePlayer::run(sf::RenderWindow &window){
 		// draw stuff on window
 		window.setView(cam.get());
         window.display();
-        //wentitiest();
+        //wait();
 	}
 	if (action == "over"){
 		GameOver over;
